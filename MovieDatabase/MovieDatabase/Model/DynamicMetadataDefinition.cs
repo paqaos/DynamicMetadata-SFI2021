@@ -9,10 +9,11 @@ namespace MovieDatabase.Model
     {
         /// <inheritdoc />
         public override string Type { get; } = "DynamicMetadata";
+
         public string Name { get; set; }
 
-        public IList<DynamicMetadataProperty> Properties { get; set; } = new List<DynamicMetadataProperty>();
+        public IList<DynamicMetadataProperty> Properties { get; set; }
 
-        public List<ValidatorConfiguration> Validators { get; set; } = new List<ValidatorConfiguration>();
+        public List<ValidatorConfiguration> Validators { get; set; }
     }
 }

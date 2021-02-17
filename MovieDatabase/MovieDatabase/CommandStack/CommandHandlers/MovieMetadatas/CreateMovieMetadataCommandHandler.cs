@@ -38,6 +38,7 @@ namespace MovieDatabase.CommandStack.CommandHandlers.MovieMetadatas
         public async Task<DynamicMetadataDto> HandleResult(CreateMovieMetadataCommand command, CancellationToken token)
         {
             var movie = _movieReadService.GetById(command.MovieId);
+
             if(movie == null)
                 throw new NotFoundException();
 
@@ -89,6 +90,15 @@ namespace MovieDatabase.CommandStack.CommandHandlers.MovieMetadatas
                 }
             }
 
+            foreach (var propertyInDefinition in definition.Properties)
+            {
+                var existingProperty = metadata.Properties.FirstOrDefault(x => x.Id == propertyInDefinition.Id);
+                if (existingProperty == null)
+                {
+                    metadata.Properties.Add(propertyInDefinition);
+                }
+            }
+
             var validationResult = validator.Validate(metadata, movie);
 
             if (validationResult.Any())
@@ -100,12 +110,12 @@ namespace MovieDatabase.CommandStack.CommandHandlers.MovieMetadatas
                 };
             }
 
-
             movie.Metadata.Add(metadata);
 
             _movieWriteService.UpdateItem(movie, token);
 
             var resultValue = _mapper.Map<DynamicMetadataDto>(metadata);
+
             return resultValue;
         }
     }

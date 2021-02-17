@@ -87,7 +87,7 @@ data that provides information about other data
 
 \begin{frame}
 \frametitle{Problem description}
-You are developing Movie database with complete information about that movie including: \pause actors, production crew, postproductions, other people involved, recording locations \& dates. \pause
+You are developing Movie database with complete information about that movie including: actors, production crew, postproductions, other people involved, recording locations \& dates. 
 \newline \newline
 Later, that data would be used to increase Box Office in Your company partners' productions.
 \end{frame}
@@ -111,9 +111,9 @@ No. &  Movie & Year & Locations & BO (bn \$) & Director \\
 \begin{frame}
 \frametitle{Technical requirements}
 \begin{enumerate}
-	\item Our application should be written in C\# \pause
-	\item Application should be portable \pause
-	\item Some updates could be done after few seconds \pause
+	\item Our application should be written in C\# 
+	\item Application should be portable
+	\item Some updates could be done after few seconds
 	\item Our system should be easy to extend
 \end{enumerate}
 \end{frame}
@@ -121,8 +121,8 @@ No. &  Movie & Year & Locations & BO (bn \$) & Director \\
 \begin{frame}
 \frametitle{Technical specification}
 \begin{enumerate}
-	\item We will use .NET 5 to build application \pause
-	\item We will use not-relational database approach to make easier extension in future \pause
+	\item We will use .NET 5 to build application
+	\item We will use not-relational database approach to make easier extension in future
 	\item For purposes of this session we will use InMemoryDatabase
 \end{enumerate}
 \end{frame}
@@ -166,7 +166,7 @@ Exploration of data "column by column" & \\
 
 \end{tabular}
 
- \pause \textbf{Extending requires devteam work}
+\textbf{Extending requires devteam work}
 
 \end{center}
 
@@ -187,7 +187,7 @@ Exploration of data "column by column" & \\
 \begin{frame}
 \frametitle{Dynamic metadata concept}
 
-In dynamic metadata approach we treat metadata and its configuration as a metadata with standard. E.g. in our movie database scenario metadata could be "Director" or "Actor" both storing some information about that person and \/ or her/his role in movie production. Adding new metadata kind would require just add new definition to database.  \pause
+In dynamic metadata approach we treat metadata and its configuration as a metadata with standard. E.g. in our movie database scenario metadata could be "Director" or "Actor" both storing some information about that person and \/ or her/his role in movie production. Adding new metadata kind would require just add new definition to database. 
 \newline
 \newline
 In overall in that case development team will provide solution with definitions, values and property types. 
@@ -227,8 +227,8 @@ What that object should contains?\\
 \begin{frame}
 \frametitle{Metadata definition - code example \footnotemark[1]}
 
+ \includegraphics{DynamicMetadataDefinition.png}
 
-\lstinputlisting[firstline=8, lastline=17]{MovieDatabase/MovieDatabase/Model/DynamicMetadataDefinition.cs}
 \footnotetext[1]{ \href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/Model/DynamicMetadataDefinition.cs}{Metadata definition class} } 
 
 \end{frame}
@@ -259,7 +259,7 @@ What that object should contains?\\
 
 \begin{frame}
 \frametitle{Metadata usage}
-How should we extend default Movie class to better match our solution? \newline \newline \pause  In our project there should be new list of properties storing information about metadata. Each of this object should contains metadata properties, metadata definition identifier and ... \pause that's all :)
+How should we extend default Movie class to better match our solution? \newline \newline  In our project there should be new list of properties storing information about metadata. Each of this object should contains metadata properties, metadata definition identifier and ... that's all :)
 \end{frame}
 
 \begin{frame}
@@ -279,11 +279,11 @@ On previous slide You could saw that "Value"  had three different data types ass
 
 \begin{frame}
 \frametitle{Layers separation} 
-Standard ASP.NET Core project is divided into three layers \pause
+Standard ASP.NET Core project is divided into three layers
 \begin{enumerate}
-	\item Presentation \pause
-	\item Business logic \pause
-	\item Data access \pause
+	\item Presentation
+	\item Business logic
+	\item Data access
 \end{enumerate}
 
 Proper storage of data and communication with outer world is crucial for our problem.
@@ -390,40 +390,39 @@ In this kind of metadata validators we validate our metadata with external data.
 
 \begin{frame}
 \frametitle{Missing data}
-This is first serious problem system should handle. First part of that issue could be handled by adding/removing/updating all properties updated in definition but there is another case. \newline \pause
-What if property doesn't exist in request? \pause E.g. for actor we specify person but we don't specify character? \pause \newline
+This is first serious problem system should handle. First part of that issue could be handled by adding/removing/updating all properties updated in definition but there is another case. \newline
+What if property doesn't exist in request? E.g. for actor we specify person but we don't specify character? \newline
 System should create missing properties and then validates content or returns missing property exception \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - lines 93-100}}.
 \end{frame}
 
 \begin{frame}
 \frametitle{Duplicated property}
-What if we are victims of somebody bad trying to break our system with invalid data? \pause \newline
-There are three available solutions - You could select best matching Your requirements \pause \newline
+What if we are victims of somebody bad trying to break our system with invalid data? \newline
+There are three available solutions - You could select best matching Your requirements \newline
 \begin{enumerate}
-	\item Handle just first occurance of property  \pause
-	\item Update property with each occurance \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - line 71}} \pause
+	\item Handle just first occurance of property
+	\item Update property with each occurance \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - line 71}}
 	\item Raise an error
 \end{enumerate}
 \end{frame}
 
 \begin{frame}
 \frametitle{Additional property}
-What if breaker from previous slide would add additional properties? \pause \newline
-There are two available solutions - You could select best matching Your requirements \pause \newline
+What if breaker from previous slide would add additional properties? \newline
+There are two available solutions - You could select best matching Your requirements \newline
 \begin{enumerate}
-	\item Ignore that property \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - lines 60-61}}  \pause
+	\item Ignore that property \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - lines 60-61}} 
 	\item Raise an error
 \end{enumerate}
 \end{frame}
 
 \begin{frame}
 \frametitle{Invalid data type}
-Final problem is with data stored in property and there could be two issues with that \pause
+Final problem is with data stored in property and there could be two issues with that
 \begin{enumerate}
-	\item Specified property type differs from type in definition \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - lines 63-70}} \pause
-	\item Data has invalid format and couldn't be parsed \footnote[2]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - lines 75-88}} \pause
+	\item Specified property type differs from type in definition \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - lines 63-70}}
+	\item Data has invalid format and couldn't be parsed \footnote[2]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/CommandHandlers/MovieMetadatas/CreateMovieMetadataCommandHandler.cs}{Creation of new metadata - lines 75-88}}
 \end{enumerate}
-\pause
 \textbf{In that case it would be better to return error}
 \end{frame}
 
@@ -439,21 +438,20 @@ Validate data
 \begin{frame}
 \frametitle{Definition versioning - Introduction}
 Sometimes would be required to change definition in many ways, but all of them will affect how our system works. We should prepare our system for: 
-\pause
 \begin{itemize}
-	\item Adding or removing property \pause
-	\item Complete deletion of metadata definition \pause
-	\item Changing type or default value \pause
-	\item Changing validation configuration \pause
+	\item Adding or removing property 
+	\item Complete deletion of metadata definition
+	\item Changing type or default value
+	\item Changing validation configuration
 \end{itemize}
 And we will discuss all of these cases in following slides
 \end{frame}
 
 \begin{frame}
 \frametitle{Handling changes}
-One of the biggest advantage of \textit{NoSQL} databases (e.g. MongoDB or CosmosDB) is that we don't keep explicite relations between objects. For the future discussion we will name Metadata definition as Source and Movie metadata as Target. \newline \newline \pause
+One of the biggest advantage of \textit{NoSQL} databases (e.g. MongoDB or CosmosDB) is that we don't keep explicite relations between objects. For the future discussion we will name Metadata definition as Source and Movie metadata as Target. \newline \newline
 
-We should implement asynchronous update with Service Bus (Azure Service Bus or RabbitMQ) with event dispatched each time we change of definition (or at least with published change). On Target side we should implement handler to keep data up to date. \pause  \newline\textbf{NOTE: It could take several seconds to update data in Target entities}.
+We should implement asynchronous update with Service Bus (Azure Service Bus or RabbitMQ) with event dispatched each time we change of definition (or at least with published change). On Target side we should implement handler to keep data up to date.  \newline\textbf{NOTE: It could take several seconds to update data in Target entities}.
 
 \end{frame}
 
@@ -482,7 +480,7 @@ Remember that it would be better to mark items as deleted rather than deleting t
 \end{frame}
 
 \begin{frame}
-\frametitle{Type or default value change}
+\frametitle{Type or default value change \footnote[1]{\href{https://github.com/paqaos/DynamicMetadata-SFI2021/blob/main/MovieDatabase/MovieDatabase/CommandStack/EventHandlers/MetadataDefinitions/PropertyDefinitionUpdatedEventHandler.cs}{Property data updated event handler}}}
 Data definition could be hard to handle in many cases since we will have validators attached to these properties. Simlary to content of previous slide we could block these kind of changes or invalidate existing validator.
 \newline
 In case of type change system should update data with provided converter - implemented by software development team - or mark it out of date and require action by some administrator. 
@@ -504,19 +502,19 @@ Metadata definition change
 
 \begin{frame}
 \frametitle{Metadata history - definition}
-It could be helpful to track changes in definition object. However this would require some changes into our code: \pause
+It could be helpful to track changes in definition object. However this would require some changes into our code:
 \begin{itemize}
-	\item We should create new object "DefinitionVersion" with unique Id, but referencing by key/id to MetadataDefinition \pause
-	\item In MetadataDefinition we should store published version of item, with reference to it \pause
-	\item There should be new endpoint to "Create new Definition Version" or to publish it \pause
-	\item All operations regarding changes in Definitions should have additional parameter "VersionId" \pause
+	\item We should create new object "DefinitionVersion" with unique Id, but referencing by key/id to MetadataDefinition
+	\item In MetadataDefinition we should store published version of item, with reference to it
+	\item There should be new endpoint to "Create new Definition Version" or to publish it
+	\item All operations regarding changes in Definitions should have additional parameter "VersionId"
 	\item All "DefinitionChange" Events should be handled only after publication of new version
 \end{itemize}
 \end{frame}
 
 \begin{frame}
 \frametitle{Metadata history - movie}
-Sometimes it would be nice to keep history of changes of Movie object. Since we could have two sources of changes for "Movie" object it wouldn't be so easy to implement similar solution as in scenario. We could simply create new object version for each time we change object - eg. add new metadata or we update metadata definition. But after little amount of time we could learn that we have one huge object (if we store information in one object) or we have a lot of big objects (in case we store each version separately). \pause
+Sometimes it would be nice to keep history of changes of Movie object. Since we could have two sources of changes for "Movie" object it wouldn't be so easy to implement similar solution as in scenario. We could simply create new object version for each time we change object - eg. add new metadata or we update metadata definition. But after little amount of time we could learn that we have one huge object (if we store information in one object) or we have a lot of big objects (in case we store each version separately).
 \newline
 \begin{center}
 	\textbf{Neither of these options is good for me}
@@ -525,8 +523,8 @@ Sometimes it would be nice to keep history of changes of Movie object. Since we 
 
 \begin{frame}
 \frametitle{Change as commit}
-There is design that would allows us to store many of changes with only one stored final object (to greatly simplify calculations). \newline \pause
-But we should start with  ...  \pause GIT
+There is design that would allows us to store many of changes with only one stored final object (to greatly simplify calculations). \newline
+But we should start with  ...  GIT
 
 \end{frame}
 
@@ -538,10 +536,10 @@ Each \textit{Save or publish} click would invoke processing of several atomic op
 
 \begin{frame}
 \frametitle {EventSourcing}
-There is design pattern called \href{https://martinfowler.com/eaaDev/EventSourcing.html}{EventSourcing} in which we store operations (Events). In specified case basing on stored events - system rebuilds final object. \pause \newline \newline
+There is design pattern called \href{https://martinfowler.com/eaaDev/EventSourcing.html}{EventSourcing} in which we store operations (Events). In specified case basing on stored events - system rebuilds final object. \newline \newline
 
-This rebuild operation could be invoked when new event appears (better in our case) or when user requests data. \newline \pause
-However there could be a lot of events stored in database and in that case rebuild would take ages \pause \newline \newline To handle this problem we should prepare snapshot, materialized state of object in one point at history. For further rebuilds we could start from event no. 750, not 1. 
+This rebuild operation could be invoked when new event appears (better in our case) or when user requests data. \newline
+However there could be a lot of events stored in database and in that case rebuild would take ages \newline \newline To handle this problem we should prepare snapshot, materialized state of object in one point at history. For further rebuilds we could start from event no. 750, not 1. 
 \end{frame}
 
 \begin{frame}
@@ -559,6 +557,10 @@ However there could be a lot of events stored in database and in that case rebui
 \frametitle{EventSourcing + Commits}
 To sum up this part we could prepare solution that includes Commits that will contains atomic changes to movie metadatas. There could be more than one atomic change in one metadata. 
 Each commit will generate new version of object and during execution of commit we will execute more all operation events.
+\begin{enumerate}
+	\item \href{https://github.com/paqaos/DynamicMetadata-SFI2021/tree/main/MovieDatabase/MovieDatabase/Operations}{Operations implementation}
+	\item \href{https://github.com/paqaos/DynamicMetadata-SFI2021/tree/main/MovieDatabase/MovieDatabase/Services/EventSourcing}{Event sourcing sample implementation}
+\end{enumerate}
 \end{frame}
 
 \begin{frame}

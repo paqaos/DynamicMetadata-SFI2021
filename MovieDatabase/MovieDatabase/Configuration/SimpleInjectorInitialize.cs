@@ -338,7 +338,15 @@ namespace MovieDatabase.Configuration
                 x.Add(new Commit
                 {
                     MovieId = "movie_2",
-                    CommitOrder = 0
+                    CommitOrder = 0,
+                    Operations = new List<IMovieOperation>
+                    {
+                        new CreateMovieOperation
+                        {
+                            OperationOrder = 0,
+                            MovieId = "movie_2"
+                        }
+                    }
                 });
             });
         }
